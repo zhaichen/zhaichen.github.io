@@ -123,9 +123,9 @@ $(document).ready(function(){
     });
 });
 
-setInterval(function () {
-    refresh();
-}, 30000)
+// setInterval(function () {
+//     refresh();
+// }, 30000)
 
 
 
