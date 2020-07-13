@@ -116,6 +116,9 @@ $(document).ready(function(){
     });
 });
 
+setInterval(function () {
+    init();
+}, 10000)
 
 
 
