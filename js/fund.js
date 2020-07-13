@@ -63,6 +63,13 @@ function init(){
     }
 }
 
+function refresh(){
+    let codeListStr = window.localStorage.getItem(fundCodeListCacheKey);
+    if(codeListStr != null && codeListStr != ""){
+        location.reload();
+    }
+}
+
 function checkExist(code){
     let codeListStr = window.localStorage.getItem(fundCodeListCacheKey);
     if(codeListStr != null && codeListStr != ""){
@@ -117,8 +124,8 @@ $(document).ready(function(){
 });
 
 setInterval(function () {
-    init();
-}, 10000)
+    refresh();
+}, 30000)
 
 
 
