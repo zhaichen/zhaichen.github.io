@@ -4,6 +4,26 @@
     <meta charset="UTF-8">
     <title>好用的功能不是我们讲的，是客户说的！</title>
     <style>
+        .main{
+            text-align: center;
+            background-color: #fff;
+            border-radius: 20px;
+            width: 300px;
+            height: 350px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+        }
+        .divCenter {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -150px 0 0 -200px;
+            width: 400px;
+            height: 300px;
+            border: 1px solid red;
+        }
         .lds-ripple {
             display: inline-block;
             position: relative;
@@ -60,6 +80,7 @@
     <!-- End Ptengine -->
 </head>
 <body style="margin:0px;padding:0px;overflow:hidden">
-<div class="lds-ripple"><div></div><div></div></div>
+<!--<div class="lds-ripple" align="center"><div></div><div></div></div>-->
+<div class="main"><h3>loading…</h3></div>
 </body>
 </html>
