@@ -19,6 +19,9 @@
             const date = myDate.getFullYear() + '年' + Number(myDate.getMonth() + Number(1)) + '月' +  myDate.getDate() + '日';
             $('#updateDate').text('更新日期：'+date)
         });
+        function download(){
+            window.open('http://idea.medeming.com/jets/images/jihuoma.zip')
+        }
     </script>
     <!-- Ptengine -->
     <script>(function(w, d, p, x) {if (!p.__ver) {w.ptengine = p;p.__ver = '1.0.0';var l = ['track', 'page', 'identify'];for (var i = 0; i < l.length; i++) {var e = l[i];p[e] = function() {p.push([e].concat(Array.prototype.slice.call(arguments, 0)));};}var s = d.getElementsByTagName('script')[0];var t = d.createElement('script');t.type = 'text/javascript';t.src = 'https://xjs.ptengine.jp/pttag.js?id=' + x;s.parentNode.insertBefore(t, s);}})(window, document, window.ptengine || [], '23l6p0ps');</script>
@@ -30,7 +33,7 @@
     <p class="lead" id="updateDate"></p>
     <hr class="my-4">
     <p>注意：如果激活后还显示cancelled，请重启一下软件就可以了</p>
-    <a class="btn btn-primary btn-lg btn-block" href="http://idea.medeming.com/jets/images/jihuoma.zip" role="button">点击生成正版激活码</a>
+    <a class="btn btn-primary btn-lg btn-block" href="javascript:download()" role="button">点击生成正版激活码</a>
 </div>
 </body>
 </html>
