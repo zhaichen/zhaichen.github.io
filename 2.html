@@ -11,10 +11,11 @@
 <div id="app">
     <nav class="navbar navbar-dark bg-dark" style="margin-bottom: 10px">
         <div class="input-group mb-3">
-            <input id="input-fund" type="search" class="form-control" placeholder="基金代码" aria-label="基金代码"
+            <input id="input-fund" v-model="inputFundCode" type="search" class="form-control" placeholder="基金代码"
+                   aria-label="基金代码"
                    aria-describedby="button-addon2">
             <div class="input-group-append">
-                <button class="btn btn-outline-danger" type="button" id="button-add-fund">添加</button>
+                <button class="btn btn-outline-danger" type="button" v-on:click="addFund">添加</button>
             </div>
         </div>
     </nav>
@@ -56,10 +57,45 @@
     const app = new Vue({
         el: '#app',
         data: {
+            inputFundCode: null,
             imageSrcList: [],
             fundNameList: []
         },
         methods: {
+            alertWarn(content) {
+                swal({
+                    title: content,
+                    icon: "warning",
+                    timer: 1500,
+                    buttons: false
+                })
+            },
+            checkExist(code) {
+                let codeListStr = window.localStorage.getItem(fundCodeListCacheKey);
+                if (codeListStr) {
+                    let codeList = codeListStr.split(',');
+                    for (let i = 0; i < codeList.length; i++) {
+                        if (code === codeList[i]) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            },
+            addFund() {
+                if (!this.inputFundCode) {
+                    this.alertWarn('请输入基金代码');
+                    return;
+                }
+                if (this.checkExist(this.inputFundCode)) {
+                    this.alertWarn('老铁你已经添加过该基金了');
+                    return;
+                }
+                let search_url = "https://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx?m=1&key=" + !this.inputFundCode;
+
+
+            }
+            ,
             removeFund() {
                 swal({
                     title: "确定要删除该基金?",
@@ -77,7 +113,8 @@
                             });
                         }
                     });
-            },
+            }
+            ,
             cacheFundCode(fundCode) {
                 let codeList = window.localStorage.getItem(fundCodeListCacheKey)
                 if (codeList == "" || codeList == null) {
