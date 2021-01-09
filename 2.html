@@ -17,25 +17,10 @@
         </div>
     </nav>
 
-    <div class="row row-cols-1 row-cols-md-3 row-cols-sm-12">
-        <div class="col mb-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4" style="margin-bottom: 10px">
             <div class="card">
-                <img :src="src" class="card-img-top" alt="...">
-            </div>
-        </div>
-        <div class="col mb-4">
-            <div class="card">
-                <img :src="src" class="card-img-top" alt="...">
-            </div>
-        </div>
-        <div class="col mb-4">
-            <div class="card">
-                <img :src="src" class="card-img-top" alt="...">
-            </div>
-        </div>
-        <div class="col mb-4">
-            <div class="card">
-                <img :src="src" class="card-img-top" alt="...">
+                <img :src="src" class="card-img-top">
             </div>
         </div>
     </div>
@@ -54,6 +39,14 @@
         el: '#app',
         data: {
             src: 'http://j4.dfcfw.com/charts/pic7/270005.png?v=0.3680328107704518'
+        },
+        methods:{
+
+        },
+        created: function (){
+            const fundCodeListCacheKey = "fund_code_list"
+            let codeList = window.localStorage.getItem(fundCodeListCacheKey)
+            alert(codeList)
         }
     })
 </script>
