@@ -20,7 +20,7 @@
     </nav>
     <div class="row" style="margin-bottom: 10px">
         <div class="col">
-            <a href="#" v-for="name in fundNameList" class="badge badge-pill badge-info"
+            <a href="#" v-on:click="removeFund" v-for="name in fundNameList" class="badge badge-pill badge-info"
                style="margin-left: 10px">{{name}}</a>
         </div>
 
@@ -49,6 +49,7 @@
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.zhimg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script>
     const fundCodeListCacheKey = "fund_code_list"
@@ -59,6 +60,24 @@
             fundNameList: []
         },
         methods: {
+            removeFund() {
+                swal({
+                    title: "确定要删除该基金?",
+                    text: "",
+                    icon: "warning",
+                    buttons: ['点错了', '确定'],
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            swal("删除成功", {
+                                icon: "success",
+                                timer: 1500,
+                                buttons: false
+                            });
+                        }
+                    });
+            },
             cacheFundCode(fundCode) {
                 let codeList = window.localStorage.getItem(fundCodeListCacheKey)
                 if (codeList == "" || codeList == null) {
