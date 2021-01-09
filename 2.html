@@ -9,7 +9,7 @@
 </head>
 <body>
 <div id="app">
-    <nav class="navbar navbar-dark bg-dark" style="margin-bottom: 15px">
+    <nav class="navbar navbar-dark bg-dark" style="margin-bottom: 10px">
         <div class="input-group mb-3">
             <input id="input-fund" type="search" class="form-control" placeholder="基金代码" aria-label="基金代码"
                    aria-describedby="button-addon2">
@@ -18,9 +18,9 @@
             </div>
         </div>
     </nav>
-    <div class="row">
+    <div class="row" style="margin-bottom: 10px">
         <div class="col">
-            <span v-for="name in fundNameList" class="badge badge-pill badge-info">{{name}}</span>
+            <span v-for="name in fundNameList" class="badge badge-pill badge-info" style="margin-left: 10px">{{name}}</span>
         </div>
     </div>
 
