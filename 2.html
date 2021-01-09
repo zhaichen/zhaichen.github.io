@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <title>New</title>
     <!-- CSS only -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 </head>
 <body>
 <div id="app">
-    <nav class="navbar navbar-dark bg-dark" style="margin-bottom: 10px">
+    <nav class="navbar navbar-dark bg-dark" style="margin-bottom: 15px">
         <div class="input-group mb-3">
-            <input id="input-fund" type="search" class="form-control" placeholder="基金代码" aria-label="基金代码"  aria-describedby="button-addon2">
+            <input id="input-fund" type="search" class="form-control" placeholder="基金代码" aria-label="基金代码"
+                   aria-describedby="button-addon2">
             <div class="input-group-append">
                 <button class="btn btn-outline-danger" type="button" id="button-add-fund">添加</button>
             </div>
@@ -18,27 +20,7 @@
     </nav>
 
     <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4" style="margin-bottom: 10px">
-            <div class="card">
-                <img :src="src" class="card-img-top">
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4" style="margin-bottom: 10px">
-            <div class="card">
-                <img :src="src" class="card-img-top">
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4" style="margin-bottom: 10px">
-            <div class="card">
-                <img :src="src" class="card-img-top">
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4" style="margin-bottom: 10px">
-            <div class="card">
-                <img :src="src" class="card-img-top">
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4" style="margin-bottom: 10px">
+        <div v-for="src in imageSrcList" class="col-sm-12 col-md-12 col-lg-4 col-xl-4" style="margin-bottom: 15px">
             <div class="card">
                 <img :src="src" class="card-img-top">
             </div>
@@ -48,29 +30,56 @@
 
 
 <!-- JS, Popper.js, and jQuery -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
-    var app = new Vue({
+    const fundCodeListCacheKey = "fund_code_list"
+    const app = new Vue({
         el: '#app',
         data: {
-            src: 'http://j4.dfcfw.com/charts/pic7/270005.png?v=0.3680328107704518'
+            imageSrcList: []
         },
-        methods:{
+        methods: {
+            cacheFundCode(fundCode) {
+                let codeList = window.localStorage.getItem(fundCodeListCacheKey)
+                if (codeList == "" || codeList == null) {
+                    window.localStorage.setItem(fundCodeListCacheKey, fundCode)
+                } else {
+                    let idList = codeList.split(',')
+                    for (let i = 0; i < idList.length; i++) {
+                        if (idList[i] == fundCode) {
+                            return
+                        }
+                    }
+                    window.localStorage.setItem(fundCodeListCacheKey, codeList + "," + fundCode)
+                }
+            }
 
         },
-        created: function (){
-            const fundCodeListCacheKey = "fund_code_list"
-            let codeList = window.localStorage.getItem(fundCodeListCacheKey)
-            alert(codeList)
+        created: function () {
+            let codeListStr = window.localStorage.getItem(fundCodeListCacheKey)
+            if(codeListStr != null && codeListStr != ""){
+                this.imageSrcList = [];
+                let codeList = codeListStr.split(',');
+                for(let i=0;i<codeList.length;i++){
+                    let src = "http://j4.dfcfw.com/charts/pic7/"+codeList[i]+".png?v=" + Math.random();
+                    this.imageSrcList.push(src)
+                }
+            }
+
         }
     })
 </script>
-
 
 
 </body>
