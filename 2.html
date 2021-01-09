@@ -18,6 +18,11 @@
             </div>
         </div>
     </nav>
+    <div class="row">
+        <div class="col-sm-12" v-for="name in fundNameList">
+            <span class="badge badge-pill badge-info">{{name}}</span>
+        </div>
+    </div>
 
     <div class="row">
         <div v-for="src in imageSrcList" class="col-sm-12 col-md-12 col-lg-4 col-xl-4" style="margin-bottom: 15px">
@@ -47,7 +52,8 @@
     const app = new Vue({
         el: '#app',
         data: {
-            imageSrcList: []
+            imageSrcList: [],
+            fundNameList: []
         },
         methods: {
             cacheFundCode(fundCode) {
@@ -70,10 +76,12 @@
             let codeListStr = window.localStorage.getItem(fundCodeListCacheKey)
             if(codeListStr != null && codeListStr != ""){
                 this.imageSrcList = [];
+                this.fundNameList = [];
                 let codeList = codeListStr.split(',');
                 for(let i=0;i<codeList.length;i++){
                     let src = "http://j4.dfcfw.com/charts/pic7/"+codeList[i]+".png?v=" + Math.random();
                     this.imageSrcList.push(src)
+                    this.fundNameList.push(codeList[i])
                 }
             }
 
