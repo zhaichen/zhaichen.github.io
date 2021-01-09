@@ -20,8 +20,11 @@
     </nav>
     <div class="row" style="margin-bottom: 10px">
         <div class="col">
-            <a href="#" v-for="name in fundNameList" class="badge badge-pill badge-info" style="margin-left: 10px">{{name}}</a>
+            <a href="#" v-for="name in fundNameList" class="badge badge-pill badge-info"
+               style="margin-left: 10px">{{name}}</a>
         </div>
+
+
     </div>
 
     <div class="row">
@@ -74,12 +77,12 @@
         },
         created: function () {
             let codeListStr = window.localStorage.getItem(fundCodeListCacheKey)
-            if(codeListStr != null && codeListStr != ""){
+            if (codeListStr != null && codeListStr != "") {
                 this.imageSrcList = [];
                 this.fundNameList = [];
                 let codeList = codeListStr.split(',');
-                for(let i=0;i<codeList.length;i++){
-                    let src = "http://j4.dfcfw.com/charts/pic7/"+codeList[i]+".png?v=" + Math.random();
+                for (let i = 0; i < codeList.length; i++) {
+                    let src = "http://j4.dfcfw.com/charts/pic7/" + codeList[i] + ".png?v=" + Math.random();
                     this.imageSrcList.push(src)
                     this.fundNameList.push(codeList[i])
                 }
