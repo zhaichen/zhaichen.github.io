@@ -12,7 +12,7 @@
 <div id="app">
     <nav class="navbar navbar-dark bg-dark" style="margin-bottom: 10px">
         <div class="input-group mb-3">
-            <input id="input-fund" v-model="inputFundCode" type="search" class="form-control" placeholder="基金代码"
+            <input id="input-fund" v-model="inputFundCode" type="search" class="form-control" placeholder="基金代码或名称"
                    aria-label="基金代码"
                    aria-describedby="button-addon2">
             <div class="input-group-append">
@@ -36,12 +36,45 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="selectFundModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">请选择需要添加的基金</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div v-for="fund in selectFundList" class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">
+                                <span class="badge badge-pill badge-info">{{fund.CODE}}</span>
+                                <span class="badge badge-pill badge-danger">{{fund.NAME}}</span>
+                                <span class="badge badge-pill badge-primary">{{fund.FundBaseInfo.FTYPE}}</span>
+                                <span class="badge badge-pill badge-warning">{{fund.FundBaseInfo.JJJL}}</span>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">不选了</button>
+                    <button type="button" class="btn btn-primary">添加</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 
 
 <!-- JS, Popper.js, and jQuery -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
@@ -60,7 +93,8 @@
         data: {
             inputFundCode: null,
             imageSrcList: [],
-            fundNameList: []
+            fundNameList: [],
+            selectFundList: []
         },
         methods: {
             alertWarn(content) {
@@ -83,7 +117,36 @@
                 }
                 return false;
             },
+            loadFund() {
+                let codeListStr = window.localStorage.getItem(fundCodeListCacheKey)
+                if (codeListStr != null && codeListStr != "") {
+                    this.imageSrcList = [];
+                    this.fundNameList = [];
+                    let codeList = codeListStr.split(',');
+                    for (let i = 0; i < codeList.length; i++) {
+                        let src = "http://j4.dfcfw.com/charts/pic7/" + codeList[i] + ".png?v=" + Math.random();
+                        this.imageSrcList.push(src)
+                        this.fundNameList.push(codeList[i])
+                    }
+                }
+            },
+            cacheFundCode(fundCode) {
+                let codeList = window.localStorage.getItem(fundCodeListCacheKey)
+                if (!codeList) {
+                    window.localStorage.setItem(fundCodeListCacheKey, fundCode)
+                } else {
+                    let idList = codeList.split(',')
+                    for (let i = 0; i < idList.length; i++) {
+                        if (idList[i] === fundCode) {
+                            return
+                        }
+                    }
+                    window.localStorage.setItem(fundCodeListCacheKey, codeList + "," + fundCode)
+                }
+                this.loadFund();
+            },
             addFund() {
+                $('#selectFundModal').modal('show');
                 if (!this.inputFundCode) {
                     this.alertWarn('请输入基金代码');
                     return;
@@ -92,7 +155,31 @@
                     this.alertWarn('老铁你已经添加过该基金了');
                     return;
                 }
-                let search_url = "https://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx?m=1&key=" + !this.inputFundCode;
+                let search_url = "https://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx?m=1&key=" + this.inputFundCode;
+
+                $.ajax({
+                    url: search_url,
+                    type: "get",
+                    dataType: "jsonp",
+                    success: data => {
+                        if (data.Datas.length === 0) {
+                            this.alertWarn('基金[' + this.inputFundCode + ']信息未找到');
+                        } else {
+                            this.selectFundList=[];
+                            let datas = data.Datas;
+                            for (let i = 0; i < datas.length; i++) {
+                                let data = datas[i];
+                                if (data.CATEGORYDESC === '基金' && data.FundBaseInfo !== "") {
+                                    this.selectFundList.push(data);
+                                    // let fundBaseInfo = data.FundBaseInfo;
+                                    // let code = fundBaseInfo.FCODE;
+                                    // this.cacheFundCode(code);
+                                }
+                            }
+                            this.inputFundCode = null;
+                        }
+                    }
+                });
 
 
             }
@@ -115,36 +202,9 @@
                         }
                     });
             }
-            ,
-            cacheFundCode(fundCode) {
-                let codeList = window.localStorage.getItem(fundCodeListCacheKey)
-                if (codeList == "" || codeList == null) {
-                    window.localStorage.setItem(fundCodeListCacheKey, fundCode)
-                } else {
-                    let idList = codeList.split(',')
-                    for (let i = 0; i < idList.length; i++) {
-                        if (idList[i] == fundCode) {
-                            return
-                        }
-                    }
-                    window.localStorage.setItem(fundCodeListCacheKey, codeList + "," + fundCode)
-                }
-            }
-
         },
         created: function () {
-            let codeListStr = window.localStorage.getItem(fundCodeListCacheKey)
-            if (codeListStr != null && codeListStr != "") {
-                this.imageSrcList = [];
-                this.fundNameList = [];
-                let codeList = codeListStr.split(',');
-                for (let i = 0; i < codeList.length; i++) {
-                    let src = "http://j4.dfcfw.com/charts/pic7/" + codeList[i] + ".png?v=" + Math.random();
-                    this.imageSrcList.push(src)
-                    this.fundNameList.push(codeList[i])
-                }
-            }
-
+            this.loadFund();
         }
     })
 </script>
