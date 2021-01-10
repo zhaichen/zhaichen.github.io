@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 </head>
-<body>
+<body style="background-color: #014c8c">
 <div id="app">
-    <nav class="navbar navbar-dark bg-dark" style="margin-bottom: 10px">
+    <nav class="navbar navbar-dark bg-dark">
         <div class="input-group mb-3">
             <input id="input-fund" v-model="inputFundCode" type="search" class="form-control" placeholder="基金代码或名称"
                    aria-label="基金代码"
@@ -22,11 +22,15 @@
     </nav>
     <div class="row" style="margin-bottom: 10px">
         <div class="col">
-            <a href="#" v-on:click="removeFund" v-for="name in fundNameList" class="badge badge-pill badge-info"
-               style="margin-left: 10px">{{name}}</a>
+            <div class="alert alert-light" role="alert">
+                <a href="#" v-on:click="removeFund" v-for="name in fundNameList" class="badge badge-pill badge-info"
+                   style="margin-left: 10px" :fundCode="name">{{name}}</a>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
         </div>
-
-
     </div>
 
     <div class="row">
@@ -51,8 +55,8 @@
                 <div class="modal-body">
                     <form>
                         <div v-for="fund in selectFundList" class="form-group form-check">
-                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                            <label class="form-check-label" for="exampleCheck1">
+                            <input type="checkbox" class="form-check-input" :id="fund.CODE" :fundAllInfo="fund">
+                            <label class="form-check-label" :for="fund.CODE">
                                 <span class="badge badge-pill badge-info">{{fund.CODE}}</span>
                                 <span class="badge badge-pill badge-danger">{{fund.NAME}}</span>
                                 <span class="badge badge-pill badge-primary">{{fund.FundBaseInfo.FTYPE}}</span>
@@ -169,11 +173,8 @@
                             let datas = data.Datas;
                             for (let i = 0; i < datas.length; i++) {
                                 let data = datas[i];
-                                if (data.CATEGORYDESC === '基金' && data.FundBaseInfo !== "") {
+                                if (data.CATEGORYDESC === '基金' && data.FundBaseInfo !== "" && data.FundBaseInfo.FTYPE !== '货币型') {
                                     this.selectFundList.push(data);
-                                    // let fundBaseInfo = data.FundBaseInfo;
-                                    // let code = fundBaseInfo.FCODE;
-                                    // this.cacheFundCode(code);
                                 }
                             }
                             this.inputFundCode = null;
