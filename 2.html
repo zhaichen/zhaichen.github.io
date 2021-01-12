@@ -7,24 +7,27 @@
     <!-- CSS only -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
 </head>
-<body style="background-color: #014c8c">
+<body>
 <div id="app">
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark navbar-fixed-top">
         <div class="input-group mb-3">
             <input id="input-fund" v-model="inputFundCode" type="search" class="form-control" placeholder="基金代码或名称"
                    aria-label="基金代码"
                    aria-describedby="button-addon2">
             <div class="input-group-append">
-                <button class="btn btn-outline-danger" type="button" v-on:click="addFund">添加</button>
+                <button class="btn btn-outline-danger" type="button" v-on:click="showSelectWindow">查询</button>
             </div>
         </div>
     </nav>
     <div class="row">
         <div class="col">
-            <div class="alert alert-dark bg-dark border-dark" role="alert">
-                <a href="#" v-on:click="removeFund" v-for="name in fundNameList" class="badge badge-pill badge-info"
-                   style="margin-left: 10px" :fundCode="name">{{name}}</a>
+            <div class="alert alert-dark bg-dark border-dark" role="alert" style="border-radius: 0px"
+                 :hidden="hiddenFundNameList">
+                <a href="#" v-on:click="removeFund(fund.CODE)" v-for="fund in fundNameList"
+                   class="badge badge-pill badge-info"
+                   style="margin-left: 10px" :fundCode="fund.CODE">{{fund.NAME}}</a>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -32,6 +35,22 @@
 
         </div>
     </div>
+
+    <div class="row" v-if="fundNameList.length===0">
+        <div class="col">
+            <div class="jumbotron jumbotron-fluid"
+                 style="height: 1280px; background: url('images/cow_1.jpg'); background-size:cover">
+                <div class="container">
+                    <h1 class="display-4">🐔🐔富🐔🐔</h1>
+                    <p class="lead">年少不知白酒香，错把科技加满仓；</p>
+                    <p class="lead">年少不知白酒好，错把医药当成宝；</p>
+                    <p class="lead">年少不知白酒贵，错把金融来安慰；</p>
+                    <p class="lead">年少不知白酒妙，错把煤炭当骄傲；</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="row">
         <div v-for="src in imageSrcList" class="col-sm-12 col-md-12 col-lg-4 col-xl-4" style="margin-bottom: 15px">
@@ -42,20 +61,23 @@
     </div>
 
 
-    <div class="modal fade" id="selectFundModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+    <div class="modal fade" id="selectFundModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+         role="dialog"
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">请选择需要添加的基金</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            v-on:click="closeSelectWindow">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <form>
                         <div v-for="fund in selectFundList" class="form-group form-check">
-                            <input type="checkbox" class="form-check-input" :id="fund.CODE" :fundAllInfo="fund">
+                            <input type="checkbox" class="form-check-input" :id="fund.CODE" :value="fund.CODE"
+                                   :fundAllInfo="fund" v-model="newAddSelectedFundList">
                             <label class="form-check-label" :for="fund.CODE">
                                 <span class="badge badge-pill badge-info">{{fund.CODE}}</span>
                                 <span class="badge badge-pill badge-danger">{{fund.NAME}}</span>
@@ -66,8 +88,10 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">不选了</button>
-                    <button type="button" class="btn btn-primary">添加</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="closeSelectWindow">
+                        不选了
+                    </button>
+                    <button type="button" class="btn btn-primary" v-on:click="addFund">添加</button>
                 </div>
             </div>
         </div>
@@ -91,14 +115,16 @@
 <script src="https://unpkg.zhimg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script>
-    const fundCodeListCacheKey = "fund_code_list"
+    const fundCodeListCacheKey = "fund_code_list";
     const app = new Vue({
         el: '#app',
         data: {
+            hiddenFundNameList: true,
             inputFundCode: null,
             imageSrcList: [],
             fundNameList: [],
-            selectFundList: []
+            selectFundList: [],
+            newAddSelectedFundList: []
         },
         methods: {
             alertWarn(content) {
@@ -123,14 +149,12 @@
             },
             loadFund() {
                 let codeListStr = window.localStorage.getItem(fundCodeListCacheKey)
-                if (codeListStr != null && codeListStr != "") {
+                if (codeListStr != null && codeListStr !== "") {
                     this.imageSrcList = [];
-                    this.fundNameList = [];
-                    let codeList = codeListStr.split(',');
+                    let codeList = codeListStr.split(',').reverse();
                     for (let i = 0; i < codeList.length; i++) {
                         let src = "http://j4.dfcfw.com/charts/pic7/" + codeList[i] + ".png?v=" + Math.random();
                         this.imageSrcList.push(src)
-                        this.fundNameList.push(codeList[i])
                     }
                 }
             },
@@ -149,8 +173,10 @@
                 }
                 this.loadFund();
             },
-            addFund() {
-                $('#selectFundModal').modal('show');
+            closeSelectWindow() {
+                this.newAddSelectedFundList = [];
+            },
+            showSelectWindow() {
                 if (!this.inputFundCode) {
                     this.alertWarn('请输入基金代码');
                     return;
@@ -169,7 +195,7 @@
                         if (data.Datas.length === 0) {
                             this.alertWarn('基金[' + this.inputFundCode + ']信息未找到');
                         } else {
-                            this.selectFundList=[];
+                            this.selectFundList = [];
                             let datas = data.Datas;
                             for (let i = 0; i < datas.length; i++) {
                                 let data = datas[i];
@@ -177,15 +203,32 @@
                                     this.selectFundList.push(data);
                                 }
                             }
-                            this.inputFundCode = null;
+                            $('#selectFundModal').modal('show');
                         }
                     }
                 });
 
-
+            },
+            addFund() {
+                if (this.newAddSelectedFundList.length === 0) {
+                    this.alertWarn('请勾选需要添加的基金');
+                    return;
+                }
+                for(let code in this.newAddSelectedFundList){
+                    if (this.checkExist(code)) {
+                        this.alertWarn('老铁你已经添加过[' + code + ']基金了');
+                        return;
+                    }
+                }
+                this.newAddSelectedFundList.forEach(code => {
+                    this.cacheFundCode(code);
+                });
+                this.newAddSelectedFundList = [];
+                this.inputFundCode = null;
+                $('#selectFundModal').modal('hide');
             }
             ,
-            removeFund() {
+            removeFund(code) {
                 swal({
                     title: "确定要删除该基金?",
                     text: "",
@@ -195,6 +238,19 @@
                 })
                     .then((willDelete) => {
                         if (willDelete) {
+                            let codeListStr = window.localStorage.getItem(fundCodeListCacheKey)
+                            if (codeListStr) {
+                                let idList = codeListStr.split(',')
+                                idList.forEach(function (item, index, arr) {
+                                    if (item === code) {
+                                        arr.splice(index, 1);
+                                    }
+                                });
+                                window.localStorage.setItem(fundCodeListCacheKey, idList.join(','))
+                                this.loadNameList();
+                                this.loadFund();
+                            }
+
                             swal("删除成功", {
                                 icon: "success",
                                 timer: 1500,
@@ -202,9 +258,42 @@
                             });
                         }
                     });
+            },
+            loadNameList() {
+                let codeList = window.localStorage.getItem(fundCodeListCacheKey)
+                if (codeList) {
+                    let idList = codeList.split(',').reverse();
+                    this.fundNameList=[];
+                    for (let i = 0; i < idList.length; i++) {
+                        let search_url = "https://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx?m=1&key=" + idList[i];
+                        $.ajax({
+                            url: search_url,
+                            type: "get",
+                            async: false,
+                            dataType: "jsonp",
+                            success: data => {
+                                if (data.Datas.length === 0) {
+                                    this.alertWarn('基金[' + this.inputFundCode + ']信息未找到');
+                                } else {
+                                    let datas = data.Datas;
+                                    for (let i = 0; i < datas.length; i++) {
+                                        let data = datas[i];
+                                        if (data.CATEGORYDESC === '基金' && data.FundBaseInfo !== "" && data.FundBaseInfo.FTYPE !== '货币型') {
+                                            this.fundNameList.push(data)
+                                            this.hiddenFundNameList = false
+                                        }
+                                    }
+
+                                }
+                            }
+                        });
+                    }
+                }
+
             }
         },
         created: function () {
+            this.loadNameList();
             this.loadFund();
         }
     })
