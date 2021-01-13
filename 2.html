@@ -25,7 +25,7 @@
         <div class="col">
             <div class="alert alert-dark bg-dark border-dark" role="alert" style="border-radius: 0px"
                  :hidden="hiddenFundNameList">
-                <a href="#" v-on:click="removeFund(fund.CODE)" v-for="fund in fundNameList"
+                <a href="#" v-on:click="removeFund(fund.CODE, fund.NAME)" v-for="fund in fundNameList"
                    class="badge badge-pill badge-info"
                    style="margin-left: 10px" :fundCode="fund.CODE">{{fund.NAME}}</a>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">

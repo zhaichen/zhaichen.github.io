@@ -39,6 +39,10 @@ const app = new Vue({
                     let src = "http://j4.dfcfw.com/charts/pic7/" + codeList[i] + ".png?v=" + Math.random();
                     this.imageSrcList.push(src)
                 }
+            }else {
+                this.imageSrcList = [];
+                this.hiddenFundNameList = true;
+                this.fundNameList = [];
             }
         },
         cacheFundCode(fundCode) {
@@ -54,6 +58,7 @@ const app = new Vue({
                 }
                 window.localStorage.setItem(fundCodeListCacheKey, codeList + "," + fundCode)
             }
+            this.loadNameList();
             this.loadFund();
         },
         closeSelectWindow() {
@@ -111,9 +116,9 @@ const app = new Vue({
             $('#selectFundModal').modal('hide');
         }
         ,
-        removeFund(code) {
+        removeFund(code, name) {
             swal({
-                title: "确定要删除该基金?",
+                title: "确定要删除["+name+"]?",
                 text: "",
                 icon: "warning",
                 buttons: ['点错了', '确定'],
@@ -129,7 +134,11 @@ const app = new Vue({
                                     arr.splice(index, 1);
                                 }
                             });
-                            window.localStorage.setItem(fundCodeListCacheKey, idList.join(','))
+                            if(idList.length===0){
+                                window.localStorage.removeItem(fundCodeListCacheKey);
+                            }else {
+                                window.localStorage.setItem(fundCodeListCacheKey, idList.join(','))
+                            }
                             this.loadNameList();
                             this.loadFund();
                         }
@@ -144,9 +153,9 @@ const app = new Vue({
         },
         loadNameList() {
             let codeList = window.localStorage.getItem(fundCodeListCacheKey)
+            this.fundNameList=[];
             if (codeList) {
                 let idList = codeList.split(',').reverse();
-                this.fundNameList=[];
                 for (let i = 0; i < idList.length; i++) {
                     let search_url = "https://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx?m=1&key=" + idList[i];
                     $.ajax({
