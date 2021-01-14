@@ -102,7 +102,7 @@ const app = new Vue({
                 this.alertWarn('请勾选需要添加的基金');
                 return;
             }
-            for(let code in this.newAddSelectedFundList){
+            for(let code of this.newAddSelectedFundList){
                 if (this.checkExist(code)) {
                     this.alertWarn('老铁你已经添加过[' + code + ']基金了');
                     return;
@@ -161,7 +161,7 @@ const app = new Vue({
                     $.ajax({
                         url: search_url,
                         type: "get",
-                        async: false,
+                        async: true,
                         dataType: "jsonp",
                         success: data => {
                             if (data.Datas.length === 0) {
@@ -171,6 +171,8 @@ const app = new Vue({
                                 for (let i = 0; i < datas.length; i++) {
                                     let data = datas[i];
                                     if (data.CATEGORYDESC === '基金' && data.FundBaseInfo !== "" && data.FundBaseInfo.FTYPE !== '货币型') {
+                                        const isExists = this.fundNameList.some((value, index) => {return value.CODE === data.CODE})
+                                        if(isExists) return
                                         this.fundNameList.push(data)
                                         this.hiddenFundNameList = false
                                     }
@@ -187,5 +189,11 @@ const app = new Vue({
     created: function () {
         this.loadNameList();
         this.loadFund();
+
+        $("body").keydown(function() {
+            if (event.keyCode === "13") {
+                $("#okBt").click();
+            }
+        });
     }
 })

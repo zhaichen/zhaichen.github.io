@@ -1,50 +1,124 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="referrer" content="no-referrer" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <title>基基富基基</title>
+    <title>🐔🐔富🐔🐔</title>
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
     <!-- Ptengine -->
     <script>(function(w, d, p, x) {if (!p.__ver) {w.ptengine = p;p.__ver = '1.0.0';var l = ['track', 'page', 'identify'];for (var i = 0; i < l.length; i++) {var e = l[i];p[e] = function() {p.push([e].concat(Array.prototype.slice.call(arguments, 0)));};}var s = d.getElementsByTagName('script')[0];var t = d.createElement('script');t.type = 'text/javascript';t.src = 'https://xjs.ptengine.jp/pttag.js?id=' + x;s.parentNode.insertBefore(t, s);}})(window, document, window.ptengine || [], '23l6p0ps');</script>
     <!-- End Ptengine -->
+
 </head>
-<body style="background-color: #014c8c">
-<nav class="navbar navbar-dark bg-dark">
-    <div class="input-group mb-3">
-        <input id="input-fund" type="search" class="form-control" placeholder="基金代码" aria-label="基金代码"  aria-describedby="button-addon2">
-        <div class="input-group-append">
-            <button class="btn btn-outline-danger" type="button" id="button-add-fund" onclick="ptengine.identify('', {
-    基金代码: document.getElementById('input-fund').value
-})">添加</button>
+<body>
+<div id="app">
+    <nav class="navbar navbar-dark bg-dark navbar-fixed-top">
+        <div class="input-group mb-3">
+            <input id="input-fund" v-model="inputFundCode" type="search" class="form-control" placeholder="基金代码或名称"
+                   aria-label="基金代码"
+                   aria-describedby="button-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-danger" type="button" v-on:click="showSelectWindow" @keyup.enter="showSelectWindow">查询</button>
+            </div>
+        </div>
+    </nav>
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-dark bg-dark border-dark" role="alert" style="border-radius: 0px"
+                 :hidden="hiddenFundNameList">
+                <a href="#" v-on:click="removeFund(fund.CODE, fund.NAME)" v-for="fund in fundNameList"
+                   class="badge badge-pill badge-info"
+                   style="margin-left: 10px" :fundCode="fund.CODE">{{fund.NAME}}</a>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
         </div>
     </div>
-</nav>
-<div class="container-fluid" id="div-fund-list">
-<!--    <div class="row">-->
-<!--        <div class="col-sm">-->
-<!--            <img src="http://j4.dfcfw.com/charts/pic6/001410.png?v=0.3680328107704518" class="figure-img img-fluid rounded">-->
-<!--        </div>-->
-<!--        <div class="col-sm">-->
-<!--            <img src="http://j4.dfcfw.com/charts/pic6/001410.png?v=0.3680328107704518" class="figure-img img-fluid rounded">-->
-<!--        </div>-->
-<!--        <div class="col-sm">-->
-<!--            <img src="http://j4.dfcfw.com/charts/pic6/001410.png?v=0.3680328107704518" class="figure-img img-fluid rounded">-->
-<!--        </div>-->
-<!--    </div>-->
+
+    <div class="row" v-if="fundNameList.length===0">
+        <div class="col">
+            <div class="jumbotron jumbotron-fluid"
+                 style="height: 1280px; background: url('images/cow_1.jpg'); background-size:cover">
+                <div class="container">
+                    <h1 class="display-4">🐔🐔富🐔🐔</h1>
+                    <p class="lead">年少不知白酒香，错把科技加满仓；</p>
+                    <p class="lead">年少不知白酒好，错把医药当成宝；</p>
+                    <p class="lead">年少不知白酒贵，错把金融来安慰；</p>
+                    <p class="lead">年少不知白酒妙，错把煤炭当骄傲；</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div v-for="src in imageSrcList" class="col-sm-12 col-md-12 col-lg-4 col-xl-4" style="margin-bottom: 15px">
+            <div class="card">
+                <img :src="src" class="card-img-top">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="selectFundModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+         role="dialog"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">请选择需要添加的基金</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            v-on:click="closeSelectWindow">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div v-for="fund in selectFundList" class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" :id="fund.CODE" :value="fund.CODE"
+                                   :fundAllInfo="fund" v-model="newAddSelectedFundList">
+                            <label class="form-check-label" :for="fund.CODE">
+                                <span class="badge badge-pill badge-info">{{fund.CODE}}</span>
+                                <span class="badge badge-pill badge-danger">{{fund.NAME}}</span>
+                                <span class="badge badge-pill badge-primary">{{fund.FundBaseInfo.FTYPE}}</span>
+                                <span class="badge badge-pill badge-warning">{{fund.FundBaseInfo.JJJL}}</span>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="closeSelectWindow">
+                        不选了
+                    </button>
+                    <button type="button" class="btn btn-primary" v-on:click="addFund">添加</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </div>
 
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js3, then Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"  crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-<script src="js2/fund.js"></script>
+
+<!-- JS, Popper.js, and jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.zhimg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="js2/main.js"></script>
+
+
 </body>
 </html>
