@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PayPal Test</title>
+</head>
+<script src="https://www.paypal.com/sdk/js?client-id=AcRupmL1nPnNE6yKnsLJ9FV9hBlXAHFeUtWqz8Pwky2DAziicgIj849YRqmUxFiYLx2WCFQbVb8qP7KT&components=buttons&vault=true&intent=subscription"></script>
+<script>
+    paypal.Buttons({
+        style: {
+            layout: 'vertical',
+            color:  'gold',
+            shape:  'rect',
+            label:  'paypal'
+        },
+        createOrder: function(data, actions) {
+            // Set up the transaction
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        currency_code: "USD",
+                        value: '999'
+                    }
+                }]
+            });
+        }
+    }).render('#paypal-button-container');
+</script>
+<body>
+<div id="paypal-button-container"></div>
+
+</body>
+
+
+</html>
