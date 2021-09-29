@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>推特就是微博</title>
+    <meta charset="utf-8" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui" />
+    <meta name="theme-color" content="#f60" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="twitter:image" content="https://npstaticdev.ptengine.jp/customer/23l6p0ps/image/833e8587532960cb83cc220e4a66eadc.png" />
+    <meta name="twitter:site" content="@Ptengine-LP" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content=">推特就是微博" />
+    <meta name="twitter:description" content="这个是推特的详情页，不知道写啥就随便写点了" />
+    <meta property="og:image" content="https://npstaticdev.ptengine.jp/customer/23l6p0ps/image/b8e88a2e8e55d8f91b25b87436259ba4.jpeg" />
+    <meta property="og:site_name" content="Ptengine">
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:secure_url" content="https://npstaticdev.ptengine.jp/customer/23l6p0ps/image/b8e88a2e8e55d8f91b25b87436259ba4.jpeg" />
+    <meta property="og:description" content="这个是非死不可的详情页，也就随便写点啥吧" />
+    <meta property="og:type" content="object">
+    <link rel="shortcut icon" href="https://www.ptengine.jp/favicon.ico" />
+    <link rel="stylesheet" href="https://npstaticdev.ptengine.jp/lp/css/element-ui.css" />
+    <link rel="stylesheet" href="https://npstaticdev.ptengine.jp/lp/css/reset.css" />
+    <link rel="stylesheet" href="https://npstaticdev.ptengine.jp/lp/widgets/widgetsUI.css" />
+    <style>
+
+
+
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded',function(){
+            if ((navigator.userAgent.match(/(iPhone|iPod|Android|ios|iOS|iPad|Backerry|WebOS|Symbian|Windows Phone|Phone)/i))) {
+                var ratio = window.screen.width / 375;
+                var els = document.getElementById('app');
+                els.style.zoom = ratio;
+                // els.style.transform = "scale("+ ratio +")";
+                // els.style.transformOrigin = "left top";
+            }
+        });
+    </script>
+    <script>
+        window.CustomEvent =
+            window.CustomEvent ||
+            (function () {
+                function CustomEvent(event, params) {
+                    params = params || {
+                        bubbles: false,
+                        cancelable: false,
+                        detail: undefined
+                    };
+                    var evt = document.createEvent('CustomEvent');
+                    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+                    return evt;
+                }
+                CustomEvent.prototype = window.Event.prototype;
+                return CustomEvent;
+            })();
+        function ptLpDispatch(obj, type, data) {
+            try {
+                var event = new CustomEvent(type, {
+                    bubbles: false,
+                    cancelable: false,
+                    detail: data
+                });
+                if (obj.dispatchEvent) {
+                    obj.dispatchEvent(event);
+                } else if (obj.fireEvent) {
+                    obj.fireEvent(event);
+                }
+            } catch (ex) {
+                console.error('dispatch event ${type} error', ex);
+            }
+        }
+        window.addEventListener('vueLoaded', function (event) {
+            var Vue = event.detail;
+            Vue.mixin({
+                methods: {
+                    hello: function () {
+                        console.log('hello world from global mixin');
+                    }
+                }
+            });
+        });
+        function colorTransform(color, a) {
+            let r,g,b;
+            let rgbaAttr = color.match(/[\d.]+/g);
+            if (rgbaAttr.length = 3) {
+                r = rgbaAttr[0];
+                g = rgbaAttr[1];
+                b = rgbaAttr[2];
+                let result = a === 'none' ? 'rgba(' + r + ',' + g + ',' + b + ')' : 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+                return result;
+            }
+            return color;
+        }
+        function buttonMouseenter(style) {
+            // 有底色按钮hover/click，按钮底色变为原色的80%不透明度；
+            if (style.backgroundColor && style.backgroundColor !== 'rgb(255, 255, 255)') {
+                style.backgroundColor = colorTransform(style.backgroundColor, 0.8);
+            } else {
+                // 边框按钮hover/click时，边框颜色保持不变同时底色填充为该边框颜色4%的不透明度；
+                if (style.borderColor) {
+                    style._border = style.backgroundColor;
+                    style.backgroundColor = colorTransform(style.borderColor, 0.04);
+                }
+            }
+        }
+
+        function buttonMouseleave(style) {
+            if (style._border !== null) {
+                style.backgroundColor = style._border;
+                style._border = null;
+            } else {
+                if (style.backgroundColor) {
+                    style.backgroundColor = colorTransform(style.backgroundColor, 'none');
+                }
+            }
+        }
+    </script>
+    <script src = 'https://jstest.ptengine.jp/23l6p0ps.js'></script>
+    <script>
+        if(!window['ptengine'])
+        {
+            console.error('no ptengine tracking code installed');
+            window['ptengine'] = {};
+        }
+        Object.assign(window.ptengine, {_pte_lp_pageId:'94cf57ee-a900-4bd9-93d2-21e9a1ca5f83', _pte_lp_versionId: '99314a38-fcaf-446f-b31c-866063739e98'});
+    </script>
+
+    <script src='https://npstaticdev.ptengine.jp/lp/sdk/js-sdk.js'></script>
+    <style>
+        #skip a {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        #skip a:focus {
+            position: static;
+            width: auto;
+            height: auto;
+        }
+    </style>
+    <link rel="preload" href="https://npstaticdev.ptengine.jp/lp/assets/js/manifest.046116c022d085453d7d.js" as="script"><link rel="preload" href="https://npstaticdev.ptengine.jp/lp/assets/js/vendor.8881f016247aa9b66caf.js" as="script"><link rel="preload" href="https://npstaticdev.ptengine.jp/lp/assets/js/app.0c73114cef181936ec1b.js" as="script"><style data-vue-ssr-id="2880fa47:0">#app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+</style><style data-vue-ssr-id="09b3014b:0">.node {
+    position: relative;
+    user-select: none;
+    font-size: 16px;
+}
+.node ::before {
+    content: "";
+    overflow: hidden;
+    height: 0;
+    width: 1px;
+}
+.node .lp-content-box {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    position: relative;
+}
+.node .component {
+    position: absolute;
+    z-index: 10;
+}
+</style></head>
+<body>
+<div id="skip"><a href="#app">skip to content</a></div>
+<script type="text/javascript" defer="defer">
+    const _fontFamily = '' || '"Noto Sans JP",Arial,"Hiragino Kaku Gothic ProN","ヒラギノ角ゴ ProN W3",Helvetica, "Hiragino Mincho Pro","YuMincho","Hiragino Sans",Meiryo,sans-serif';
+    var  _customJS = '';
+    var  _pageJS = '';
+    _customJS && appendScript(atob(_customJS));
+    _pageJS && appendScript(atob(_pageJS));
+    document.body.style.fontFamily = _fontFamily;
+    function appendScript(code) {
+        var scriptEl = document.createElement('script');
+        var head = document.head;
+        scriptEl.innerHTML = `
+                    document.addEventListener('DOMContentLoaded',function(){
+                        ${code}
+                    });
+                `;
+        head.appendChild(scriptEl);
+    }
+</script>
+<div id="app" data-server-rendered="true"><div id="container-widgetae9f16e020d411ecae74cff3f5b522ae" data-id="ae9f16e020d411ecae74cff3f5b522ae" data-type="container-widget" class="node" style="width:100%;height:400px;"><!----><!----><div fixedPosition="" class="container-widget" style="background-color:#fff;width:100%;height:400px;" data-v-680c550e><!----></div><div id="container-widget-content-ae9f16e020d411ecae74cff3f5b522ae" data-id="ae9f16e020d411ecae74cff3f5b522ae" data-type="container-widget" class="lp-content-box"><div id="image-widgetb8dd28e020d411ecae74cff3f5b522ae" data-id="b8dd28e020d411ecae74cff3f5b522ae" data-type="image-widget" index="0" class="node component" style="left:334px;top:9px;width:375px;height:461.53846153846155px;"><!----><!----><div src="https://npstaticdev.ptengine.jp/customer/23l6p0ps/image/f3936ee885981a12880a4c57d50d4c55.jpeg" alt="" class="imageWrapper" data-v-1c4bba42><img src="https://npstaticdev.ptengine.jp/customer/23l6p0ps/image/f3936ee885981a12880a4c57d50d4c55.jpeg" style="overflow:hidden;border-style:;border-color:#fff;border-width:;border-radius:;opacity:1;box-shadow:;" data-v-1c4bba42></div><!----><!----></div></div><!----></div><div id="container-widgetb00f21a020d411ecae74cff3f5b522ae" data-id="b00f21a020d411ecae74cff3f5b522ae" data-type="container-widget" class="node" style="width:100%;height:400px;"><!----><!----><div fixedPosition="" class="container-widget" style="background-color:#fff;width:100%;height:400px;" data-v-680c550e><!----></div><div id="container-widget-content-b00f21a020d411ecae74cff3f5b522ae" data-id="b00f21a020d411ecae74cff3f5b522ae" data-type="container-widget" class="lp-content-box"><div id="image-widgetb40b2e7020d411ecae74cff3f5b522ae" data-id="b40b2e7020d411ecae74cff3f5b522ae" data-type="image-widget" index="0" class="node component" style="left:400px;top:127px;width:200px;height:200px;"><!----><!----><div src="https://npstaticdev.ptengine.jp/customer/23l6p0ps/image/404bd3b16fafce57295ca8ce370d7601.png" alt="" class="imageWrapper" data-v-1c4bba42><img src="https://npstaticdev.ptengine.jp/customer/23l6p0ps/image/404bd3b16fafce57295ca8ce370d7601.png" style="overflow:hidden;border-style:;border-color:#fff;border-width:;border-radius:;opacity:1;box-shadow:;" data-v-1c4bba42></div><!----><!----></div></div><!----></div></div><script>window.__INITIAL_STATE__={"sections":[{"type":"container-widget","label":"容器","name":"Untitled block(1)","style":{"rotate":0,"opacity":1,"width":"100%","height":400,"backgroundColor":"#fff","backgroundImage":""},"animation":{"name":"","duration":1},"tracking":{},"events":[],"props":{"fixed":false,"fixedPosition":""},"advance":{"html":"","css":"","js":""},"groupStyle":{},"isLock":false,"groupId":"","children":[{"type":"image-widget","label":"图片","name":"图片","style":{"rotate":0,"opacity":1,"width":375,"height":461.53846153846155,"borderColor":"#fff","borderStyle":"","borderRadius":0,"boxShadow":"","top":9,"left":334},"animation":{"name":"","duration":1},"tracking":{},"events":[],"props":{"src":"https:\u002F\u002Fnpstaticdev.ptengine.jp\u002Fcustomer\u002F23l6p0ps\u002Fimage\u002Ff3936ee885981a12880a4c57d50d4c55.jpeg","alt":""},"advance":{"html":"","css":"","js":""},"groupStyle":{},"isLock":false,"groupId":"","id":"b8dd28e020d411ecae74cff3f5b522ae"}],"id":"ae9f16e020d411ecae74cff3f5b522ae"},{"type":"container-widget","label":"容器","name":"Untitled block(2)","style":{"rotate":0,"opacity":1,"width":"100%","height":400,"backgroundColor":"#fff","backgroundImage":""},"animation":{"name":"","duration":1},"tracking":{},"events":[],"props":{"fixed":false,"fixedPosition":""},"advance":{"html":"","css":"","js":""},"groupStyle":{},"isLock":false,"groupId":"","children":[{"type":"image-widget","label":"图片","name":"图片","style":{"rotate":0,"opacity":1,"width":200,"height":200,"borderColor":"#fff","borderStyle":"","borderRadius":0,"boxShadow":"","top":127,"left":400},"animation":{"name":"","duration":1},"tracking":{},"events":[],"props":{"src":"https:\u002F\u002Fnpstaticdev.ptengine.jp\u002Fcustomer\u002F23l6p0ps\u002Fimage\u002F404bd3b16fafce57295ca8ce370d7601.png","alt":""},"advance":{"html":"","css":"","js":""},"groupStyle":{},"isLock":false,"groupId":"","id":"b40b2e7020d411ecae74cff3f5b522ae"}],"id":"b00f21a020d411ecae74cff3f5b522ae"}]}</script><script src="https://npstaticdev.ptengine.jp/lp/assets/js/manifest.046116c022d085453d7d.js" defer></script><script src="https://npstaticdev.ptengine.jp/lp/assets/js/vendor.8881f016247aa9b66caf.js" defer></script><script src="https://npstaticdev.ptengine.jp/lp/assets/js/app.0c73114cef181936ec1b.js" defer></script>
+</body>
+</html>
