@@ -1,0 +1,14 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>CI/CD - 标签 - 翟晨的博客</title>
+        <link>https://zhaichen.com/tags/ci/cd/</link>
+        <description>CI/CD - 标签 - 翟晨的博客</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><atom:link href="https://zhaichen.com/tags/ci/cd/" rel="self" type="application/rss+xml" /><item>
+    <title>CI/CD是什么？</title>
+    <link>https://zhaichen.com/cicd/</link>
+    <pubDate>Sat, 27 Nov 2021 00:00:00 &#43;0000</pubDate><author>
+        <name>chen</name>
+    </author><guid>https://zhaichen.com/cicd/</guid>
+    <description><![CDATA[什么是CI/CD CI/CD 是一种使用连续方法进行软件开发的工具 持续集成 CI 考虑一个应用程序，其代码存储在 GitLab 的 Git 存储库中。开发人员每天多次推送代码更改。]]></description>
+</item></channel>
+</rss>

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title class="pjax-title">CI/CD是什么？ - 翟晨的博客</title><meta name="Description" content="CI/CD 是一种使用连续方法进行软件开发的工具"><meta property="og:title" content="CI/CD是什么？" />
+<meta property="og:description" content="CI/CD 是一种使用连续方法进行软件开发的工具" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://zhaichen.com/cicd/" /><meta property="og:image" content="https://zhaichen.com/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-11-27T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-11-27T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://zhaichen.com/logo.png"/>
+
+<meta name="twitter:title" content="CI/CD是什么？"/>
+<meta name="twitter:description" content="CI/CD 是一种使用连续方法进行软件开发的工具"/>
+<meta name="application-name" content="翟晨的博客">
+<meta name="apple-mobile-web-app-title" content="翟晨的博客">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://zhaichen.com/cicd/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "CI/CD是什么？",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhaichen.com\/cicd\/"
+        },"genre": "posts","keywords": "CI\/CD, DevOps","wordcount":  1886 ,
+        "url": "https:\/\/zhaichen.com\/cicd\/","datePublished": "2021-11-27T00:00:00+00:00","dateModified": "2021-11-27T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "chen"
+            },"description": "CI/CD 是一种使用连续方法进行软件开发的工具"
+    }
+    </script></head>
+
+<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme);}
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="翟晨的博客">翟晨的博客</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/fund/index.html"> 基基富基基 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="#" onclick="return false;" class="menu-item theme-select" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                    <select class="color-theme-select" id="theme-select-desktop" title="切换主题">
+                        <option value="light">浅色</option>
+                        <option value="dark">深色</option>
+                        <option value="black">黑色</option>
+                        <option value="auto">跟随系统</option>
+                    </select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="翟晨的博客">翟晨的博客</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="#" onclick="return false;" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/fund/index.html" title="">基基富基基</a><a href="#" onclick="return false;" class="menu-item theme-select" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+                <select class="color-theme-select" id="theme-select-mobile" title="切换主题">
+                    <option value="light">浅色</option>
+                    <option value="dark">深色</option>
+                    <option value="black">黑色</option>
+                    <option value="auto">跟随系统</option>
+                </select>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><div class="toc" id="toc-auto">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-auto"></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle", "wide")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "false")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">CI/CD是什么？</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">chen</a>
+                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E6%8A%80%E6%9C%AF/"><i class="far fa-folder fa-fw"></i>技术</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-11-27">2021-11-27</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2021-11-27">2021-11-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1886 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="true">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#什么是cicd">什么是CI/CD</a>
+      <ul>
+        <li><a href="#持续集成-ci">持续集成 CI</a></li>
+        <li><a href="#持续交付cd">持续交付CD</a></li>
+        <li><a href="#持续部署cd">持续部署CD</a></li>
+      </ul>
+    </li>
+    <li><a href="#cicd-工作流程">CI/CD 工作流程</a></li>
+    <li><a href="#深入了解-cicd-工作流程">深入了解 CI/CD 工作流程</a></li>
+    <li><a href="#概念">概念</a></li>
+    <li><a href="#开始">开始</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="什么是cicd">什么是CI/CD</h2>
+<p>CI/CD 是一种使用连续方法进行软件开发的工具</p>
+<h3 id="持续集成-ci">持续集成 CI</h3>
+<p>考虑一个应用程序，其代码存储在 GitLab 的 Git 存储库中。开发人员每天多次推送代码更改。对于每次推送到存储库，您可以创建一组脚本来自动构建和测试您的应用程序。这些脚本有助于减少您在应用程序中引入错误的机会。</p>
+<p>这种做法称为<a href="https://en.wikipedia.org/wiki/Continuous_integration" target="_blank" rel="noopener noreffer">持续集成</a>。提交给应用程序的每个更改，甚至是开发分支，都会自动且连续地构建和测试。这些测试可确保更改通过您为应用程序建立的所有测试、指南和代码合规性标准。</p>
+<p><a href="https://gitlab.com/gitlab-org/gitlab" target="_blank" rel="noopener noreffer">GitLab 本身</a>就是一个使用持续集成作为软件开发方法的项目示例。对于对项目的每次推送，都会针对代码运行一组检查。</p>
+<h3 id="持续交付cd">持续交付CD</h3>
+<p>可以将CI验证后的代码经由结构化的部署工作流，交付给您的应用程序。</p>
+<h3 id="持续部署cd">持续部署CD</h3>
+<p>可以帮助您的团队更快完成对用户的交付工作。CI帮助您在开发循环初期就能捕捉并尽可能减少错误，CD可以保证只将验证好的代码发送到您的应用程序。CI和CD必须协同配合，才帮助您的团队更快捷高效地完成构建。CI/CD在全面优化的软件开发工作中也发挥着至关重要的作用。</p>
+<h2 id="cicd-工作流程">CI/CD 工作流程</h2>
+<p>首先讨论问题中的代码实现，然后在本地处理您提议的更改。然后，可以将提交推送到托管在 GitLab 中的远程存储库中的功能分支。推送会触发项目的 CI/CD 管道。然后，运行自动化脚本（顺序或并行）：</p>
+<ul>
+<li>构建并测试您的应用程序。</li>
+<li>在 Review App 中预览更改。</li>
+</ul>
+<p>实施后按预期工作：</p>
+<ul>
+<li>审查并批准您的代码。</li>
+<li>将功能分支合并到默认分支中。（GitLab CI/CD 会自动将您的更改部署到生产环境。）</li>
+</ul>
+<p><img
+        class="lazyload"
+        data-src="/image/cicd_work_flow.png"
+        data-srcset="/image/cicd_work_flow.png, /image/cicd_work_flow.png 1.5x, /image/cicd_work_flow.png 2x"
+        data-sizes="auto"
+        alt="/image/cicd_work_flow.png"
+        title="12"
+    /></p>
+<h2 id="深入了解-cicd-工作流程">深入了解 CI/CD 工作流程</h2>
+<p>深入了解工作流程，您可以看到 GitLab 在 DevOps 生命周期的每个阶段可用的功能。
+<img
+        class="lazyload"
+        data-src="/image/srljcicd.png"
+        data-srcset="/image/srljcicd.png, /image/srljcicd.png 1.5x, /image/srljcicd.png 2x"
+        data-sizes="auto"
+        alt="/image/srljcicd.png"
+        title="12"
+    /></p>
+<ol>
+<li>Verify</li>
+</ol>
+<ul>
+<li>通过持续集成自动构建和测试你的应用程序</li>
+<li>使用GitLab代码质量（GitLab Code Quality）分析你的源代码质量</li>
+<li>通过浏览器性能测试（Browser Performance Testing）确定代码更改对性能的影响</li>
+<li>执行一系列测试，比如Container Scanning , Dependency Scanning , JUnit tests</li>
+<li>用Review Apps部署更改，以预览每个分支上的应用程序更改</li>
+</ul>
+<ol start="2">
+<li>Package</li>
+</ol>
+<ul>
+<li>用Container Registry存储Docker镜像</li>
+<li>用NPM Registry存储NPM包</li>
+<li>用Maven Repository存储Maven artifacts</li>
+<li>用Conan Repository存储Conan包</li>
+</ul>
+<ol start="3">
+<li>Release</li>
+</ol>
+<ul>
+<li>持续部署，自动将你的应用程序部署到生产环境</li>
+<li>持续交付，手动点击以将你的应用程序部署到生产环境</li>
+<li>用GitLab Pages部署静态网站</li>
+<li>仅将功能部署到一个Pod上，并让一定比例的用户群通过Canary Deployments访问临时部署的功能（PS：即灰度发布）</li>
+<li>在Feature Flags之后部署功能</li>
+<li>用GitLab Releases将发布说明添加到任意Git tag</li>
+<li>使用Deploy Boards查看在Kubernetes上运行的每个CI环境的当前运行状况和状态</li>
+<li>使用Auto Deploy将应用程序部署到Kubernetes集群中的生产环境</li>
+</ul>
+<p>使用GitLab CI/CD，还可以：</p>
+<ul>
+<li>通过Auto DevOps轻松设置应用的整个生命周期</li>
+<li>将应用程序部署到不同的环境</li>
+<li>安装你自己的GitLab Runner</li>
+<li>Schedule pipelines</li>
+<li>使用安全测试报告（Security Test reports）检查应用程序漏洞</li>
+</ul>
+<h2 id="概念">概念</h2>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://docs.gitlab.com/ee/ci/pipelines/index.html" target="_blank" rel="noopener noreffer">Pipelines</a>  （管道）</td>
+<td>通过管道构建 CI/CD 流程。</td>
+</tr>
+<tr>
+<td><a href="https://docs.gitlab.com/ee/ci/variables/index.html" target="_blank" rel="noopener noreffer">CI/CD variables</a> （变量）</td>
+<td>构建过程使用的变量，全局变量，私有变量</td>
+</tr>
+<tr>
+<td><a href="https://docs.gitlab.com/ee/ci/environments/index.html" target="_blank" rel="noopener noreffer">Environments</a> （环境）</td>
+<td>应用程序部署到不同的环境（开发，测试、生产）</td>
+</tr>
+<tr>
+<td><a href="https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html" target="_blank" rel="noopener noreffer">Job artifacts</a> （作业，CICD运行最小单元）</td>
+<td>输出、执行任务的每个作业抽象</td>
+</tr>
+<tr>
+<td><a href="https://docs.gitlab.com/ee/ci/caching/index.html" target="_blank" rel="noopener noreffer">Cache dependencies</a> （缓存依赖）</td>
+<td>使用这个组件把依赖的组件缓存起来，提高执行速度</td>
+</tr>
+<tr>
+<td><a href="https://docs.gitlab.com/runner/" target="_blank" rel="noopener noreffer">GitLab Runner</a> （执行器）</td>
+<td>CI/CD的执行器， 可以理解为Spark中的Worker executor</td>
+</tr>
+<tr>
+<td><a href="https://docs.gitlab.com/ee/ci/pipelines/pipeline_efficiency.html" target="_blank" rel="noopener noreffer">Pipeline efficiency</a> （执行效率分析）</td>
+<td>监控和分析管道用的，比如用于查找管道执行慢的问题, 帮助提升管道执行效率</td>
+</tr>
+<tr>
+<td><a href="https://docs.gitlab.com/ee/ci/test_cases/index.html" target="_blank" rel="noopener noreffer">Test cases</a> （测试用例）</td>
+<td>测试场景使用</td>
+</tr>
+</tbody>
+</table>
+<h2 id="开始">开始</h2>
+<ul>
+<li>
+<p>创建<code>.gitlab-ci.yml</code>文件， 位于项目根目录下（约定大于配置），仓库一旦收到任何推送，GitLab将立即查找.gitlab-ci.yml文件，并根据文件的内容在Runner上启动作业。</p>
+</li>
+<li>
+<p>定义管道</p>
+<p>如果一个阶段中的<em>所有</em>作业<em>都</em>成功，管道就会进入下一个阶段。</p>
+<p>如果某个阶段中的<em>任何</em>作业失败，则（通常）不会执行下一阶段，并且管道会提前结束。</p>
+<p>一般来说，管道是自动执行的，一旦创建就不需要干预。但是，有时您也可以手动与管道进行交互。</p>
+<p>一个典型的管道可能包含四个阶段，按以下顺序执行：</p>
+<ul>
+<li><code>build</code> 、<code>test</code>、<code>staging</code>、<code>production</code></li>
+</ul>
+</li>
+<li>
+<p>变量</p>
+<p>​ CI/CD 变量是一种环境变量。可以使用它们：</p>
+<ul>
+<li>
+<p>控制作业和<a href="https://docs.gitlab.com/ee/ci/pipelines/index.html" target="_blank" rel="noopener noreffer">管道</a>的行为</p>
+</li>
+<li>
+<p>存储要重复使用的值</p>
+</li>
+<li>
+<p>避免在<code>.gitlab-ci.yml</code>文件中硬编码值</p>
+<p>可以使用<a href="https://docs.gitlab.com/ee/ci/variables/#predefined-cicd-variables" target="_blank" rel="noopener noreffer">预定义的 CI/CD 变量</a>或定义自定义：</p>
+<ul>
+<li><a href="https://docs.gitlab.com/ee/ci/variables/#create-a-custom-cicd-variable-in-the-gitlab-ciyml-file" target="_blank" rel="noopener noreffer"><code>.gitlab-ci.yml</code>文件中的变量</a></li>
+<li><a href="https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project" target="_blank" rel="noopener noreffer">项目 CI/CD 变量</a></li>
+<li><a href="https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-group" target="_blank" rel="noopener noreffer">分组 CI/CD 变量</a></li>
+<li><a href="https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-an-instance" target="_blank" rel="noopener noreffer">实例 CI/CD 变量</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>环境和部署</p>
+<p>环境描述了代码的部署位置。</p>
+</li>
+</ul>
+</div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-11-27</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/ci/cd/">CI/CD</a>,&nbsp;<a href="/tags/devops/">DevOps</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"></div>
+</div>
+<div id="comments"></div></article></div>
+        </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">天行健，君子以自强不息</div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">1991 - 2021</span></div>
+        </div></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div class="assets"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/fuse/fuse.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/topbar/topbar.min.js"></script><script type="text/javascript" src="/lib/pjax/pjax.min.js"></script><script type="text/javascript" src="/js/theme.min.js"></script><script>
+			var _hmt = _hmt || [];
+			(function() {
+			  var hm = document.createElement("script");
+			  hm.src = "https://hm.baidu.com/hm.js?e336d13d29f533f6250ae070ceaa1c2a";
+			  var s = document.getElementsByTagName("script")[0]; 
+			  s.parentNode.insertBefore(hm, s);
+			})();
+		</script></div>
+
+<div class="pjax-assets"><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":50,"threshold":0.3,"type":"fuse","useExtendedSearch":false}};</script><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/katex.min.css">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+    <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript></div>
+</body>
+
+</html>
